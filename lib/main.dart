@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:my_desktop_app/screens/home_screen.dart' as HomeScreen;
 import 'package:my_desktop_app/screens/pos_screen.dart';
 import 'package:my_desktop_app/screens/login_screen.dart';
+import 'package:my_desktop_app/screens/report_screen.dart';
+
 
 void main() {
   runApp(
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginPage(),
         '/pos': (context) => PosScreen(),
         '/login': (context) => LoginPage(),
+       '/report': (context) => ReportScreen(),
       },
     );
   }
