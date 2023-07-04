@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_desktop_app/screens/pos_screen.dart';
-import 'package:my_desktop_app/screens/report/inventory_screen.dart';
 
 class InventorySidePanel extends StatelessWidget {
+  final Function(String) onItemSelected; // Callback for item selection
+
+  InventorySidePanel({required this.onItemSelected});
+
   @override
   Widget build(BuildContext context) {
     // User information
@@ -42,15 +44,15 @@ class InventorySidePanel extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 16), // Add spacing between user info and modules
+            SizedBox(height: 26), // Add spacing between user info and modules
 
             Divider(),
 
             ListTile(
-              leading: Icon(Icons.dashboard),
+              leading: Icon(Icons.assignment),
               title: Text('Dashboard'),
               onTap: () {
-                // Handle dashboard click
+                onItemSelected('Dashboard'); // Invoke the callback with the selected item
               },
             ),
 
@@ -60,7 +62,7 @@ class InventorySidePanel extends StatelessWidget {
               leading: Icon(Icons.add),
               title: Text('Add Product'),
               onTap: () {
-                // Handle add product click
+                onItemSelected('Add Product'); // Invoke the callback with the selected item
               },
             ),
 
@@ -69,15 +71,8 @@ class InventorySidePanel extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.category),
               title: Text('Categories'),
-              trailing: DropdownButton(
-                onChanged: (value) {
-                  // Handle category dropdown value change
-                },
-                value: null, // Set the selected category value
-                items: [], // Add DropdownMenuItem widgets for each category
-              ),
               onTap: () {
-                // Handle categories click
+                onItemSelected('Categories'); // Invoke the callback with the selected item
               },
             ),
 
@@ -87,7 +82,7 @@ class InventorySidePanel extends StatelessWidget {
               leading: Icon(Icons.account_circle),
               title: Text('Account'),
               onTap: () {
-                // Handle account click
+                onItemSelected('Account'); // Invoke the callback with the selected item
               },
             ),
 
@@ -97,7 +92,7 @@ class InventorySidePanel extends StatelessWidget {
               leading: Icon(Icons.bug_report),
               title: Text('Report Bug'),
               onTap: () {
-                // Handle report bug click
+                onItemSelected('Report Bug'); // Invoke the callback with the selected item
               },
             ),
 
@@ -111,6 +106,12 @@ class InventorySidePanel extends StatelessWidget {
                 // After logout, navigate back to the login page
                 Navigator.pushReplacementNamed(context, '/login');
               },
+            ),
+
+            // Divider(),
+
+            ListTile(
+              // this tile is just meant to add height to the panel
             ),
           ],
         ),

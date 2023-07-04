@@ -48,20 +48,20 @@ class SidePanel extends StatelessWidget {
             title: Text('Inventory'),
             onTap: () {
               // Handle inventory click
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => InventoryScreen()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => InventoryScreen()),
+              // );
             },
           ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Products Page'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PosScreen()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => PosScreen()),
+              // );
             },
           ),
           ListTile(
