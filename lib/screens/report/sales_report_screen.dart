@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:my_desktop_app/components/product.dart';
 import 'package:my_desktop_app/components/cart_panel.dart';
-import 'package:my_desktop_app/components/inventory_side_panel.dart';
-import 'package:my_desktop_app/screens/report/dashboard.dart';
+import 'package:my_desktop_app/components/sales_report_side_panel.dart';
+import 'package:my_desktop_app/screens/report/sales_dashboard.dart';
 import 'package:my_desktop_app/screens/report/bug_report.dart';
 
 import 'package:my_desktop_app/screens/report/add_product_screen.dart';
 
-
 import 'package:provider/provider.dart';
 import 'package:my_desktop_app/components/providers/product_cart_provider.dart';
 
-class InventoryScreen extends StatefulWidget {
+class SalesReportScreen extends StatefulWidget {
   @override
-  _InventoryScreenState createState() => _InventoryScreenState();
+  _SalesReportScreenState createState() => _SalesReportScreenState();
 }
 
-class _InventoryScreenState extends State<InventoryScreen> {
+class _SalesReportScreenState extends State<SalesReportScreen> {
   String selectedItem = 'Dashboard'; // Hardcoded selected item
 
   Widget renderSelectedWidget() {
     switch (selectedItem) {
-      case 'Inventory Report':
-        return Text('Render Inventory Report Widget here');
+      case 'Sales Report':
+        return Text('Render Sales Report Widget here');
       case 'Add Product':
         return AddProductScreen();
       case 'Categories':
@@ -32,7 +31,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       case 'Report Bug':
         return BugReportWidget();
       case 'Dashboard':
-        return Dashboard(); // Render the Dashboard widget
+        return SalesDashboard(); // Render the Dashboard widget
       default:
         return SizedBox.shrink();
     }
@@ -42,11 +41,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inventory Report'),
+        title: Text('Sales Report'),
       ),
       body: Row(
         children: [
-          InventorySidePanel(
+          SalesReportSidePanel(
             onItemSelected: (itemName) {
               setState(() {
                 selectedItem = itemName;
@@ -59,14 +58,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 children: [
                   SizedBox(height: 20),
                   Text(
-                    ' Report',
+                    'Sales Report',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  // SizedBox(height: 10),
-                  
-                  // SizedBox(height: 10),
-                  // Text('Selected Item: $selectedItem'),
-                  // SizedBox(height: 10),
                   renderSelectedWidget(),
                 ],
               ),

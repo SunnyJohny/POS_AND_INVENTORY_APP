@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BugReport {
   final String title;
@@ -64,6 +65,41 @@ class _BugReportWidgetState extends State<BugReportWidget> {
     );
   }
 
+  void sendWhatsAppMessage() async {
+    final Uri whatsappLaunchUri = Uri(
+      scheme: 'https',
+      host: 'api.whatsapp.com',
+      path: 'send',
+      queryParameters: {
+        'phone': '08030611606', // Replace with your phone number
+        'text': 'Bug Report: $title\n$description',
+      },
+    );
+
+    if (await canLaunch(whatsappLaunchUri.toString())) {
+      await launch(whatsappLaunchUri.toString());
+    } else {
+      throw 'Could not launch WhatsApp';
+    }
+  }
+
+  void sendEmail() async {
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: 'johnsunday803@gmail.com', // Replace with your email address
+      queryParameters: {
+        'subject': 'Bug Report: $title',
+        'body': description,
+      },
+    );
+
+    if (await canLaunch(emailLaunchUri.toString())) {
+      await launch(emailLaunchUri.toString());
+    } else {
+      throw 'Could not launch email';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -71,6 +107,41 @@ class _BugReportWidgetState extends State<BugReportWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'Contact Details',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 8),
+          Row(
+            children: [
+              Icon(Icons.phone),
+              SizedBox(width: 8),
+              Text('08030611606'),
+              SizedBox(width: 16),
+              GestureDetector(
+                onTap: sendWhatsAppMessage,
+                child: Row(
+                  children: [
+                    Icon(Icons.message),
+                    SizedBox(width: 8),
+                    Text('+2348030611606'),
+                  ],
+                ),
+              ),
+              SizedBox(width: 16),
+              GestureDetector(
+                onTap: sendEmail,
+                child: Row(
+                  children: [
+                    Icon(Icons.email),
+                    SizedBox(width: 8),
+                    Text('johnsunday803@gmail.com'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
           Text(
             'Bug Report',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -100,9 +171,35 @@ class _BugReportWidgetState extends State<BugReportWidget> {
             },
           ),
           SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: submitBugReport,
-            child: Text('Submit'),
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: submitBugReport,
+                child: Text('Save to DB'),
+              ),
+              SizedBox(width: 16),
+              ElevatedButton(
+                onPressed: sendWhatsAppMessage,
+                child: Row(
+                  children: [
+                    Icon(Icons.message),
+                    SizedBox(width: 8),
+                    Text('WhatsApp'),
+                  ],
+                ),
+              ),
+              SizedBox(width: 16),
+              ElevatedButton(
+                onPressed: sendEmail,
+                child: Row(
+                  children: [
+                    Icon(Icons.email),
+                    SizedBox(width: 8),
+                    Text('Email'),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

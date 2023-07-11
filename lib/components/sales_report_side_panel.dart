@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_desktop_app/screens/report/inventory_screen.dart';
-import 'package:my_desktop_app/screens/report/sales_report_screen.dart';
 
+class SalesReportSidePanel extends StatelessWidget {
+  final Function(String) onItemSelected; // Callback for item selection
 
+  SalesReportSidePanel({required this.onItemSelected});
 
-class ReportSidePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // User information
@@ -22,9 +22,13 @@ class ReportSidePanel extends StatelessWidget {
               padding: EdgeInsets.all(16),
               child: Column(
                 children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage: AssetImage('path_to_image'), // Replace with the path to the user's profile image
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.blue, // Replace with your desired color
+                    ),
                   ),
                   SizedBox(height: 16),
                   Text(
@@ -44,43 +48,25 @@ class ReportSidePanel extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 16), // Add spacing between user info and modules
+            SizedBox(height: 26), // Add spacing between user info and modules
 
             Divider(),
 
             ListTile(
               leading: Icon(Icons.assignment),
-              title: Text('Inventory Report'),
+              title: Text('Dashboard'),
               onTap: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => InventoryScreen()),
-  );
-},
-
-            ),
-
-            Divider(),
-
-            ListTile(
-              leading: Icon(Icons.shopping_cart),
-              title: Text('Sales Report'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SalesReportScreen()),
-                );
+                onItemSelected('Dashboard'); // Invoke the callback with the selected item
               },
             ),
 
             Divider(),
 
             ListTile(
-              leading: Icon(Icons.trending_up),
-              title: Text('Profit/Loss Report'),
+              leading: Icon(Icons.receipt),
+              title: Text('Invoices/Payments'),
               onTap: () {
-                // Handle reports click
-                Navigator.pushReplacementNamed(context, '/report');
+                onItemSelected('Invoices'); // Invoke the callback with the selected item
               },
             ),
 
@@ -88,39 +74,38 @@ class ReportSidePanel extends StatelessWidget {
 
             ListTile(
               leading: Icon(Icons.people),
-              title: Text('Top Customers Report'),
+              title: Text('Customer'),
               onTap: () {
-                // Handle user profile click
+                onItemSelected('Customer'); // Invoke the callback with the selected item
+              },
+            ),
+             Divider(),
+
+            ListTile(
+              leading: Icon(Icons.shopping_cart),
+              title: Text('Products'),
+              onTap: () {
+                onItemSelected('Products'); // Invoke the callback with the selected item
               },
             ),
 
             Divider(),
 
             ListTile(
-              leading: Icon(Icons.store),
-              title: Text('Vendor/Supplier Report'),
+              leading: Icon(Icons.analytics),
+              title: Text('Analysis'),
               onTap: () {
-                // Handle user profile click
+                onItemSelected('Analysis'); // Invoke the callback with the selected item
               },
             ),
 
             Divider(),
 
             ListTile(
-              leading: Icon(Icons.bar_chart),
-              title: Text('Employee Performance Report'),
+              leading: Icon(Icons.receipt_long),
+              title: Text('Custom Report'),
               onTap: () {
-                // Handle user profile click
-              },
-            ),
-
-            Divider(),
-
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-              onTap: () {
-                // Handle settings click
+                onItemSelected('Custom Report'); // Invoke the callback with the selected item
               },
             ),
 
@@ -134,6 +119,12 @@ class ReportSidePanel extends StatelessWidget {
                 // After logout, navigate back to the login page
                 Navigator.pushReplacementNamed(context, '/login');
               },
+            ),
+
+            // Divider(),
+
+            ListTile(
+              // this tile is just meant to add height to the panel
             ),
           ],
         ),
