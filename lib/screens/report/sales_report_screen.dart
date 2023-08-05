@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:my_desktop_app/components/product.dart';
 import 'package:my_desktop_app/components/cart_panel.dart';
 import 'package:my_desktop_app/components/sales_report_side_panel.dart';
+import 'package:my_desktop_app/components/custom_sales_report.dart';
+
 import 'package:my_desktop_app/screens/report/sales_dashboard.dart';
+
+import 'package:my_desktop_app/screens/report/analytsis_dashboard.dart';
+
+
 import 'package:my_desktop_app/screens/report/bug_report.dart';
 
 import 'package:my_desktop_app/screens/report/add_product_screen.dart';
@@ -24,14 +30,20 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
         return Text('Render Sales Report Widget here');
       case 'Add Product':
         return AddProductScreen();
-      case 'Categories':
-        return Text('Render Categories Widget here');
+      case 'Analysis':
+        return AnalysisDashboard();
       case 'Account':
         return Text('Render Account Widget here');
-      case 'Report Bug':
-        return BugReportWidget();
-      case 'Dashboard':
-        return SalesDashboard(); // Render the Dashboard widget
+      case 'Custom Report':
+     
+       return CustomSalesReport();
+        // return AddProductScreen();
+
+
+       case 'Dashboard':
+        return SingleChildScrollView( // Wrap SalesDashboard with SingleChildScrollView
+          child: SalesDashboard(),
+        );
       default:
         return SizedBox.shrink();
     }

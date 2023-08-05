@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_desktop_app/screens/pos_screen.dart';
-import 'package:my_desktop_app/screens/report/inventory_screen.dart';
 
 
 class SidePanel extends StatelessWidget {

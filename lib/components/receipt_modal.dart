@@ -16,10 +16,7 @@ class ReceiptModal extends StatelessWidget {
   final List<Product> cartItems;
   final double total;
 
-  ReceiptModal(
-      {required this.attendantName,
-      required this.cartItems,
-      required this.total});
+  ReceiptModal({required this.attendantName, required this.cartItems, required this.total});
 
   @override
   Widget build(BuildContext context) {
@@ -36,40 +33,23 @@ class ReceiptModal extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Your Company Name',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              '123 Main Street, City',
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              'Phone: (123) 456-7890 ext. $receiptNumber',
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              'Email: company@example.com',
-              style: TextStyle(fontSize: 16),
-            ),
             SizedBox(height: 20),
             Divider(),
             SizedBox(height: 20),
             Text(
-              'Attendant: $attendantName', // Display the attendant's name
+              'Attendant: $attendantName',
               style: TextStyle(fontSize: 16),
             ),
             Text(
-              'Receipt Number: $receiptNumber', // Display the receipt number
+              'Receipt Number: $receiptNumber',
               style: TextStyle(fontSize: 16),
             ),
             Text(
-              'Date: ${DateFormat('MM/dd/yyyy').format(now)}', // Display the date
+              'Date: ${DateFormat('MM/dd/yyyy').format(now)}',
               style: TextStyle(fontSize: 16),
             ),
             Text(
-              'Time: ${DateFormat('HH:mm').format(now)}', // Display the time
+              'Time: ${DateFormat('HH:mm').format(now)}',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 20),
@@ -104,7 +84,7 @@ class ReceiptModal extends StatelessWidget {
             SizedBox(height: 10),
             Divider(),
             SizedBox(height: 10),
-            Expanded(
+            Expanded( // Wrap the ListView.builder with Expanded
               child: ListView.builder(
                 itemCount: cartItems.length,
                 itemBuilder: (context, index) {

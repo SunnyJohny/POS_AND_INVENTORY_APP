@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_desktop_app/components/product.dart';
-import 'package:my_desktop_app/components/cart_panel.dart';
+// import 'package:my_desktop_app/components/cart_panel.dart';
 import 'package:my_desktop_app/components/report_side_panel.dart';
 
 

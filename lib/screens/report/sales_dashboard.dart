@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:my_desktop_app/components/custom_sales_report_modal.dart';
+
 class SalesDashboard extends StatefulWidget {
   @override
   _SalesDashboardState createState() => _SalesDashboardState();
@@ -22,7 +25,10 @@ class _SalesDashboardState extends State<SalesDashboard> {
     );
 
     if (selectedDate != null) {
+           itemsPerPage = 1; // Reassign itemsPerPage to 1
+
       setState(() {
+
         fromDate = selectedDate;
       });
     }
@@ -39,132 +45,283 @@ class _SalesDashboardState extends State<SalesDashboard> {
     if (selectedDate != null) {
       setState(() {
         toDate = selectedDate;
+           itemsPerPage = 1; // Reassign itemsPerPage to 4
       });
     }
   }
 
-  List<Map<String, String>> items = [
+  List<Map<String, dynamic>> items = [
     {
       'sn': '1',
       'transactionId': 'TRX001',
-      'date': '2023-07-01',
+      'date': '2023-07-15',
       'itemname': 'Phone',
-
       'customer': 'John Doe',
-      
-      'quantity': '5',
+      'quantity': 5,
       'payment': 'Cash',
-      'amount': '₦500',
+      'amount': 500.0,
       'attendant': 'Jane Smith',
       'status': 'Completed',
     },
     {
       'sn': '2',
       'transactionId': 'TRX002',
-      'date': '2023-07-01',
+      'date': '${DateTime.now().toString().split(' ')[0]}',
       'itemname': 'Cream',
-
       'customer': 'Alice Johnson',
-      'quantity': '6',
-
+      'quantity': 6,
       'payment': 'Card',
-      'amount': '₦250',
+      'amount': 250.0,
       'attendant': 'John Smith',
       'status': 'Completed',
     },
     {
       'sn': '3',
       'transactionId': 'TRX003',
-      'date': '2023-07-02',
+      'date': '${DateTime.now().toString().split(' ')[0]}',
       'itemname': 'Paracetamol',
-
       'customer': 'Bob Williams',
-      'quantity': '4',
-
+      'quantity': 4,
       'payment': 'Cash',
-      'amount': '₦700',
+      'amount': 700.0,
       'attendant': 'Jane Doe',
       'status': 'Pending',
     },
     {
       'sn': '4',
-      'transactionId': 'TRX004',
-      'date': '2023-07-02',
-      'itemname': 'Perfume',
-
-      'customer': 'Eve Brown',
-      'quantity': '5',
-
-      'payment': 'Card',
-      'amount': '₦450',
-      'attendant': 'John Doe',
-      'status': 'Completed',
-    },
-    {
-      'sn': '5',
-      'transactionId': 'TRX005',
-      
-
-
-      'date': '2023-07-03',
-      'itemname': 'Liquid Soap',
-
-      'customer': 'Grace Davis',
-      'quantity': '5',
-
+      'transactionId': 'TRX003',
+      'date': '${DateTime.now().toString().split(' ')[0]}',
+      'itemname': 'Paracetamol',
+      'customer': 'Bob Williams',
+      'quantity': 4,
       'payment': 'Cash',
-      'amount': '₦800',
-      'attendant': 'Jane Smith',
-      'status': 'Pending',
-    },
-    {
-      'sn': '6',
-      'transactionId': 'TRX006',
-      'date': '2023-07-03',
-      'itemname': 'Bag',
-
-      'customer': 'Henry Wilson',
-      'quantity': '1',
-
-      'payment': 'Card',
-      'amount': '₦350',
-      'attendant': 'John Smith',
-      'status': 'Completed',
-    },
-    {
-      'sn': '7',
-      'transactionId': 'TRX007',
-      'date': '2023-07-03',
-      'itemname': 'Book',
-
-      'customer': 'Ivy Thomas',
-      'quantity': '2',
-
-      'payment': 'Cash',
-      'amount': '₦650',
+      'amount': 700.0,
       'attendant': 'Jane Doe',
       'status': 'Pending',
     },
-  ];
+    {
+      'sn': '3',
+      'transactionId': 'TRX003',
+      'date': '${DateTime.now().toString().split(' ')[0]}',
+      'itemname': 'Paracetamol',
+      'customer': 'Bob Williams',
+      'quantity': 4,
+      'payment': 'Cash',
+      'amount': 700.0,
+      'attendant': 'Jane Doe',
+      'status': 'Pending',
+    },
+    {
+      'sn': '3',
+      'transactionId': 'TRX003',
+      'date': '2023-07-01',
+      'itemname': 'Paracetamol',
+      'customer': 'Bob Williams',
+      'quantity': 4,
+      'payment': 'Cash',
+      'amount': 700.0,
+      'attendant': 'Jane Doe',
+      'status': 'Pending',
+    },
+    {
+      'sn': '3',
+      'transactionId': 'TRX003',
+      'date': '2023-07-02',
+      'itemname': 'Paracetamol',
+      'customer': 'Bob Williams',
+      'quantity': 4,
+      'payment': 'Cash',
+      'amount': 700.0,
+      'attendant': 'Jane Doe',
+      'status': 'Pending',
+    },
+    {
+      'sn': '3',
+      'transactionId': 'TRX003',
+      'date': '2023-07-03',
+      'itemname': 'Paracetamol',
+      'customer': 'Bob Williams',
+      'quantity': 4,
+      'payment': 'Cash',
+      'amount': 700.0,
+      'attendant': 'Jane Doe',
+      'status': 'Pending',
+    },
 
-  List<Map<String, String>> get paginatedItems {
-    final startIndex = (currentPage - 1) * itemsPerPage;
-    return items.skip(startIndex).take(itemsPerPage).toList();
-  }
+    // Add more items here...
+  ];
+  void sortItemsByDate() {
+  items.sort((a, b) {
+    // Convert the date strings to DateTime objects
+    DateTime dateA = DateTime.parse(a['date']);
+    DateTime dateB = DateTime.parse(b['date']);
+
+    // Sort in descending order (latest date first)
+    return dateB.compareTo(dateA);
+  });
+}
+
+
+ List<Map<String, dynamic>> get paginatedItems {
+  sortItemsByDate(); // Sort the items before pagination
+  final startIndex = (currentPage - 1) * itemsPerPage;
+  return items.skip(startIndex).take(itemsPerPage).toList();
+}
+
 
   int get totalItems => items.length;
   int get totalPages => (totalItems / itemsPerPage).ceil();
-
-  List<Map<String, String>> get filteredItems {
-    if (_searchText.isEmpty) {
+  List<Map<String, dynamic>> get filteredItems {
+    if (_searchText.isEmpty && fromDate == null && toDate == null) {
       return paginatedItems;
     } else {
-      return paginatedItems.where((item) {
-        return item['transactionId']!
-            .toLowerCase()
-            .contains(_searchText.toLowerCase());
+      return items.where((item) {
+        // Filter based on item name search
+        final bool itemNameMatches =
+            item['itemname'].toLowerCase().contains(_searchText.toLowerCase());
+
+        // Filter based on date range selection
+        final bool isDateInRange = (fromDate == null ||
+                (item['date'] != null &&
+                    DateTime.parse(item['date']).isAtSameMomentAs(fromDate!)) ||
+                (item['date'] != null &&
+                    DateTime.parse(item['date']).isAfter(fromDate!))) &&
+            (toDate == null ||
+                (item['date'] != null &&
+                    DateTime.parse(item['date']).isAtSameMomentAs(toDate!)) ||
+                (item['date'] != null &&
+                    DateTime.parse(item['date'])
+                        .isBefore(toDate!.add(Duration(days: 1)))));
+
+        // Return true if item name and date range both match
+        return itemNameMatches && isDateInRange;
       }).toList();
     }
+  }
+
+  double getTodaySales() {
+    var now = DateTime.now();
+    var formattedDate = DateFormat('yyyy-MM-dd').format(now);
+
+    double totalSales = 0;
+    for (var item in items) {
+      if (item['date'] == formattedDate) {
+        totalSales += item['amount'];
+      }
+    }
+    return totalSales;
+  }
+
+double getTotalSales() {
+  if (_searchText.isEmpty && fromDate == null && toDate == null) {
+    // If nothing is filtered, return the total sales from the original items list
+    double totalSales = 0;
+    for (var item in items) {
+      totalSales += item['amount'];
+    }
+    return totalSales;
+  } else {
+    // If there are filters, calculate the total sales from the filtered items list
+    double totalSales = 0;
+    for (var item in filteredItems) {
+      totalSales += item['amount'];
+    }
+    return totalSales;
+  }
+}
+
+
+void _printSalesReport(BuildContext context) async {
+  // ... (existing code to print to console and show toasts)
+
+  // Navigate to a new page and display the CustomSalesReportModal
+  final bool shouldPrintReport = await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('Print Sales Report'),
+      content: Text('Do you want to print the sales report?'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context, true); // Return true when user confirms
+          },
+          child: Text('Yes'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context, false); // Return false when user cancels
+          },
+          child: Text('No'),
+        ),
+      ],
+    ),
+  );
+
+  // Show a toast based on the user's choice
+  if (shouldPrintReport == true) {
+    Fluttertoast.showToast(
+      msg: 'Sales report is being printed...',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey[800],
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+
+    // Add a short delay to mimic the actual printing process (remove this in the actual implementation)
+    await Future.delayed(Duration(seconds: 2));
+
+    // Show the custom modal with the sales report
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CustomSalesReportModal(
+          attendantName: 'John Doe', // Provide the attendant's name
+          cartItems: filteredItems, // Use the filteredItems instead of cartItems
+          total: getTotalSales(), // Use the total sales instead of total
+        ),
+      ),
+    );
+
+    // Show a toast to indicate that printing is completed
+    Fluttertoast.showToast(
+      msg: 'Sales report printed successfully!',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey[800],
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  } else {
+    // User chose not to print the report, show a message if needed
+    Fluttertoast.showToast(
+      msg: 'Sales report printing canceled!',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey[800],
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+}
+
+
+
+
+  int getProductsSoldToday() {
+    var now = DateTime.now();
+    var formattedDate = DateFormat('yyyy-MM-dd').format(now);
+
+    int productsSold = 0;
+    for (var item in items) {
+      if (item['date'] == formattedDate) {
+        productsSold += item['quantity'] as int;
+      }
+    }
+    return productsSold;
   }
 
   String _searchText = '';
@@ -187,14 +344,14 @@ class _SalesDashboardState extends State<SalesDashboard> {
             children: [
               _buildStatCard(
                 'Today Sales',
-                '₦500',
+                '₦${getTodaySales().toStringAsFixed(2)}',
                 Icons.attach_money,
                 Colors.blue,
               ),
               SizedBox(width: 16),
               _buildStatCard(
                 'Total Sales',
-                '₦10,000',
+                '₦${getTotalSales().toStringAsFixed(2)}',
                 Icons.monetization_on,
                 Colors.green,
               ),
@@ -207,8 +364,8 @@ class _SalesDashboardState extends State<SalesDashboard> {
               ),
               SizedBox(width: 16),
               _buildStatCard(
-                ' Products Sold Today',
-                '5',
+                'Products Sold Today',
+                getProductsSoldToday(),
                 Icons.shopping_cart,
                 Colors.red,
               ),
@@ -235,7 +392,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
                         SizedBox(width: 8),
                         Text(
                           fromDate != null
-                              ? fromDate.toString().split(' ')[0]
+                              ? DateFormat('dd-MM-yyyy').format(fromDate!)
                               : 'Select Date',
                           style:
                               TextStyle(decoration: TextDecoration.underline),
@@ -253,7 +410,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
                         SizedBox(width: 8),
                         Text(
                           toDate != null
-                              ? toDate.toString().split(' ')[0]
+                              ? DateFormat('dd-MM-yyyy').format(toDate!)
                               : 'Select Date',
                           style:
                               TextStyle(decoration: TextDecoration.underline),
@@ -295,33 +452,25 @@ class _SalesDashboardState extends State<SalesDashboard> {
             columns: [
               DataColumn(label: Text('Transaction ID')),
               DataColumn(label: Text('Date')),
-              // DataColumn(label: Text('Item')),
-
               DataColumn(label: Text('Attendant')),
-
-             DataColumn(label: Text('Item Name')),
+              DataColumn(label: Text('Item Name')),
               DataColumn(label: Text('Qty')),
-
               DataColumn(label: Text('Amount')),
               DataColumn(label: Text('Payment')),
-
               DataColumn(label: Text('Status')),
             ],
             rows: filteredItems
                 .map(
                   (item) => DataRow(
                     cells: [
-                      DataCell(Text(item['transactionId']!)),
-                      DataCell(Text(item['date']!)),
-                      // DataCell(Text(item['itemname']!)),
-
-                      DataCell(Text(item['attendant']!)),
-                      DataCell(Text(item['itemname']!)),
-                      DataCell(Text(item['quantity']!)),
-
-                      DataCell(Text(item['amount']!)),
-                      DataCell(Text(item['payment']!)),
-                      DataCell(Text(item['status']!)),
+                      DataCell(Text(item['transactionId'])),
+                      DataCell(Text(item['date'])),
+                      DataCell(Text(item['attendant'])),
+                      DataCell(Text(item['itemname'])),
+                      DataCell(Text(item['quantity'].toString())),
+                      DataCell(Text('₦${item['amount'].toStringAsFixed(2)}')),
+                      DataCell(Text(item['payment'])),
+                      DataCell(Text(item['status'])),
                     ],
                   ),
                 )
@@ -348,6 +497,12 @@ class _SalesDashboardState extends State<SalesDashboard> {
                 ),
               ),
               Text('Page $currentPage of $totalPages'),
+              // Add the "Print Sales Report" button
+       ElevatedButton(
+  onPressed: () => _printSalesReport(context),
+  child: Text('Print Sales Report'),
+),
+
               Flexible(
                 flex: 1,
                 child: Container(
@@ -362,6 +517,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
                         : null,
                     child: Text('Next'),
                   ),
+                  
                 ),
               ),
             ],
@@ -373,7 +529,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
   }
 
   Widget _buildStatCard(
-      String title, String value, IconData icon, Color color) {
+      String title, dynamic value, IconData icon, Color color) {
     return Expanded(
       child: Container(
         padding: EdgeInsets.all(16),
@@ -394,7 +550,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  value,
+                  '$value',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
