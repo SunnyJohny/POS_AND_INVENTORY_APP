@@ -6,6 +6,8 @@ import 'package:my_desktop_app/screens/home_screen.dart' as HomeScreen;
 import 'package:my_desktop_app/screens/pos_screen.dart';
 import 'package:my_desktop_app/screens/login_screen.dart';
 import 'package:my_desktop_app/screens/report_screen.dart';
+import 'package:my_desktop_app/screens/profit_and_loss_screen.dart';
+
 
 
 void main() {
@@ -37,6 +39,8 @@ class MyApp extends StatelessWidget {
         '/pos': (context) => PosScreen(),
         '/login': (context) => LoginPage(),
        '/report': (context) => ReportScreen(),
+       '/profitandloss': (context) => ProfitAndLossReportScreen(),
+
       },
     );
   }

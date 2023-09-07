@@ -3,13 +3,25 @@ import 'package:intl/intl.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_desktop_app/components/custom_sales_report_modal.dart';
+import 'package:file_picker/file_picker.dart';
 
-class SalesDashboard extends StatefulWidget {
+import 'dart:io';
+import 'dart:math';
+
+class ExpenseDashboard extends StatefulWidget {
   @override
-  _SalesDashboardState createState() => _SalesDashboardState();
+  _ExpenseDashboardState createState() => _ExpenseDashboardState();
 }
 
-class _SalesDashboardState extends State<SalesDashboard> {
+class _ExpenseDashboardState extends State<ExpenseDashboard> {
+  // Function to generate a random 5-character alphanumeric Ref No
+  static String _generateRandomRefNo() {
+    const String chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    final Random random = Random.secure();
+    return String.fromCharCodes(Iterable.generate(
+        5, (_) => chars.codeUnitAt(random.nextInt(chars.length))));
+  }
+
   int currentPage = 1;
   int itemsPerPage = 5;
 
@@ -51,109 +63,40 @@ class _SalesDashboardState extends State<SalesDashboard> {
 
   List<Map<String, dynamic>> items = [
     {
-      'sn': '1',
-      'id': '1', // Item ID or Number
+      // 'sn': '1',
+      // 'id': '1', // Item ID or Number
       'transactionId': 'TRX001',
       'date': '2023-07-15',
-      'itemname': 'Phone',
-      'customer': 'John Doe',
-      'quantity': 5,
-      'payment': 'Cash',
+      'description': 'Expense 1', // Add a description field
+      'expCat': 'Category 1', // Add an expense category field
       'amount': 500.0,
-      'attendant': 'Jane Smith',
-      'status': 'Completed',
+      'vendor': 'Vendor 1', // Add a vendor field
+      'pMethod': 'Cash', // Add a payment method field
     },
     {
-      'sn': '2',
-      'id': '2', // Item ID or Number
+      // 'sn': '2',
+      // 'id': '2', // Item ID or Number
       'transactionId': 'TRX002',
-      'date': '${DateTime.now().toString().split(' ')[0]}',
-      'itemname': 'Cream',
-      'customer': 'Alice Johnson',
-      'quantity': 6,
-      'payment': 'Card',
+      'date': '2023-07-15',
+      'description': 'Expense 2', // Add a description field
+      'expCat': 'Category 2', // Add an expense category field
       'amount': 250.0,
-      'attendant': 'John Smith',
-      'status': 'Completed',
+      'vendor': 'Vendor 2', // Add a vendor field
+      'pMethod': 'Credit Card', // Add a payment method field
     },
-    {
-      'sn': '3',
-      'id': '3', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '${DateTime.now().toString().split(' ')[0]}',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
+
+      {
+      // 'sn': '2',
+      // 'id': '2', // Item ID or Number
+      'transactionId': 'TRX002',
+      'date': '2023-07-15',
+      'description': 'Expense 3', // Add a description field
+      'expCat': 'Category 2', // Add an expense category field
+      'amount': 450.0,
+      'vendor': 'Vendor 2', // Add a vendor field
+      'pMethod': 'Credit Card', // Add a payment method field
     },
-    {
-      'sn': '4',
-      'id': '4', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '${DateTime.now().toString().split(' ')[0]}',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
-    },
-    {
-      'sn': '3',
-      'id': '5', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '${DateTime.now().toString().split(' ')[0]}',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
-    },
-    {
-      'sn': '3',
-      'id': '6', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '2023-07-01',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
-    },
-    {
-      'sn': '3',
-      'id': '7', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '2023-07-02',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
-    },
-    {
-      'sn': '3',
-      'id': '8', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '2023-07-03',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
-    },
+
 
     // Add more items here...
   ];
@@ -233,6 +176,28 @@ class _SalesDashboardState extends State<SalesDashboard> {
       }
       return totalSales;
     }
+  }
+
+  double getTotalCOGS() {
+    if (_searchText.isEmpty && fromDate == null && toDate == null) {
+      // If nothing is filtered, return the total COGS from the original items list
+      double totalCOGS = 0;
+      for (var item in items) {
+        totalCOGS += 100;
+      }
+      return totalCOGS;
+    } else {
+      // If there are filters, calculate the total COGS from the filtered items list
+      double totalCOGS = 0;
+      for (var item in filteredItems) {
+        totalCOGS += 50;
+      }
+      return totalCOGS;
+    }
+  }
+
+  void _postExpense() {
+    print("Expense posted");
   }
 
   void _printSalesReport({
@@ -337,7 +302,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
           Padding(
             padding: EdgeInsets.only(left: 16),
             child: Text(
-              'Sales Stats',
+              'Expense Account',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
@@ -345,30 +310,31 @@ class _SalesDashboardState extends State<SalesDashboard> {
           Row(
             children: [
               _buildStatCard(
-                'Today Sales',
-                '₦${getTodaySales().toStringAsFixed(2)}',
-                Icons.attach_money,
+                ' Total Expense',
+                '₦${getTotalSales().toStringAsFixed(2)}',
+
+                Icons.trending_up, // Updated icon
                 Colors.blue,
               ),
               SizedBox(width: 16),
               _buildStatCard(
-                'Total Sales',
-                '₦${getTotalSales().toStringAsFixed(2)}',
-                Icons.monetization_on,
+                'Filtered Expenses',
+                '₦${getTodaySales().toStringAsFixed(2)}',
+
+                Icons.money_off, // Updated icon
                 Colors.green,
               ),
               SizedBox(width: 16),
               _buildStatCard(
-                'Today Invoices',
-                '',
+                'COGS',
+                getTotalCOGS(),
                 Icons.receipt,
                 Colors.orange,
               ),
-              SizedBox(width: 16),
               _buildStatCard(
-                'Products Sold Today',
+                'OPex',
                 getProductsSoldToday(),
-                Icons.shopping_cart,
+                Icons.assignment, // Updated icon
                 Colors.red,
               ),
             ],
@@ -450,16 +416,16 @@ class _SalesDashboardState extends State<SalesDashboard> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16),
+          // Updated DataTable with additional columns
           DataTable(
             columns: [
               DataColumn(label: Text('Transaction ID')),
               DataColumn(label: Text('Date')),
-              DataColumn(label: Text('Attendant')),
-              DataColumn(label: Text('Item Name')),
-              DataColumn(label: Text('Qty')),
+              DataColumn(label: Text('Description')),
+              DataColumn(label: Text('Exp Cat')),
               DataColumn(label: Text('Amount')),
-              DataColumn(label: Text('Payment')),
-              DataColumn(label: Text('Status')),
+              DataColumn(label: Text('Vendor')),
+              DataColumn(label: Text('P.Method')),
             ],
             rows: filteredItems
                 .map(
@@ -467,17 +433,21 @@ class _SalesDashboardState extends State<SalesDashboard> {
                     cells: [
                       DataCell(Text(item['transactionId'])),
                       DataCell(Text(item['date'])),
-                      DataCell(Text(item['attendant'])),
-                      DataCell(Text(item['itemname'])),
-                      DataCell(Text(item['quantity'].toString())),
-                      DataCell(Text('₦${item['amount'].toStringAsFixed(2)}')),
-                      DataCell(Text(item['payment'])),
-                      DataCell(Text(item['status'])),
+                      DataCell(
+                          Text(item['description'])), // Add description cell
+                      DataCell(
+                          Text(item['expCat'])), // Add expense category cell
+                     DataCell(Text(item['amount'].toStringAsFixed(2))),
+
+                      DataCell(Text(item['vendor'])), // Add vendor cell
+                      DataCell(
+                          Text(item['pMethod'])), // Add payment method cell
                     ],
                   ),
                 )
                 .toList(),
           ),
+
           SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -500,6 +470,45 @@ class _SalesDashboardState extends State<SalesDashboard> {
               ),
               Text('Page $currentPage of $totalPages'),
               // Add the "Print Sales Report" button
+
+// In your main widget (ExpenseDashboard), open the form in an AlertDialog
+              ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Post Expense"),
+                        content:
+                            ExpenseFormWidget(), // Use the form widget here
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context); // Close the dialog
+                            },
+                            child: Text("Close"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // Handle form submission here
+                              // Access the form field values using the
+                              print("Posted");
+
+                              // Do something with the form data, e.g., send it to a server
+                              // Example: postExpense(date, refNo, description, expCat, amount, vendor, pMethod);
+
+                              Navigator.pop(context); // Close the dialog
+                            },
+                            child: Text("Submit"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text('Post Expense'),
+              ),
+
               ElevatedButton(
                 onPressed: () => _printSalesReport(
                   shouldPrintReport: true, // or false based on your logic
@@ -510,9 +519,8 @@ class _SalesDashboardState extends State<SalesDashboard> {
                   toDate: toDate!, // Non-null assertion here
                   context: context,
                 ),
-                child: Text('Print Sales Report'),
+                child: const Text('Print Sales Report'),
               ),
-
               Flexible(
                 flex: 1,
                 child: Container(
@@ -575,6 +583,105 @@ class _SalesDashboardState extends State<SalesDashboard> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+
+
+class ExpenseFormWidget extends StatefulWidget {
+  @override
+  _ExpenseFormWidgetState createState() => _ExpenseFormWidgetState();
+}
+
+class _ExpenseFormWidgetState extends State<ExpenseFormWidget> {
+  final TextEditingController _dateController = TextEditingController(text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
+  final TextEditingController _refNoController = TextEditingController(text: _generateRandomRefNo());
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _expCatController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _vendorController = TextEditingController();
+  final TextEditingController _pMethodController = TextEditingController();
+  File? _receiptFile; // Field to store the selected file
+
+  // Function to generate a random 5-character alphanumeric Ref No
+  static String _generateRandomRefNo() {
+    const String chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    final Random random = Random.secure();
+    return String.fromCharCodes(Iterable.generate(5, (_) => chars.codeUnitAt(random.nextInt(chars.length))));
+  }
+
+  // Function to handle file selection
+  Future<void> _selectFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      setState(() {
+        _receiptFile = file;
+      });
+    } else {
+      // User canceled file selection
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextFormField(
+            controller: _dateController,
+            decoration: InputDecoration(labelText: 'Date'),
+          ),
+          TextFormField(
+            controller: _refNoController,
+            decoration: InputDecoration(labelText: 'Ref No'),
+          ),
+          TextFormField(
+            controller: _descriptionController,
+            decoration: InputDecoration(labelText: 'Description'),
+          ),
+          TextFormField(
+            controller: _expCatController,
+            decoration: InputDecoration(labelText: 'Exp Cat'),
+          ),
+          TextFormField(
+            controller: _amountController,
+            decoration: InputDecoration(labelText: 'Amount'),
+            keyboardType: TextInputType.number,
+          ),
+          TextFormField(
+            controller: _vendorController,
+            decoration: InputDecoration(labelText: 'Vendor'),
+          ),
+          TextFormField(
+            controller: _pMethodController,
+            decoration: InputDecoration(labelText: 'P.Method'),
+          ),
+           Container(
+            margin: EdgeInsets.only(top: 16), // Add margin here
+            child: ElevatedButton(
+              onPressed: _selectFile, // Call the file selection function
+              child: Text('Upload Receipt'),
+            ),
+          ),
+          // Display the selected file name, if available
+          if (_receiptFile != null) Text('Selected File: ${_receiptFile!.path}'),
+      
+           Container(
+            margin: EdgeInsets.only(top: 16), // Add margin here
+            child: ElevatedButton(
+              onPressed: () {
+                // Handle form submission here, including the selected file (_receiptFile)
+                // ...
+              },
+              child: Text('Submit'),
+            ),
+          ),
+        ],
       ),
     );
   }

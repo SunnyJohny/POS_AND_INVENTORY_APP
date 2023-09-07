@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_desktop_app/screens/report/inventory_screen.dart';
 import 'package:my_desktop_app/screens/report/sales_report_screen.dart';
 
-
-
 class ReportSidePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -24,7 +22,8 @@ class ReportSidePanel extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 40,
-                    backgroundImage: AssetImage('path_to_image'), // Replace with the path to the user's profile image
+                    backgroundImage: AssetImage(
+                        'path_to_image'), // Replace with the path to the user's profile image
                   ),
                   SizedBox(height: 16),
                   Text(
@@ -52,12 +51,11 @@ class ReportSidePanel extends StatelessWidget {
               leading: Icon(Icons.assignment),
               title: Text('Inventory Report'),
               onTap: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => InventoryScreen()),
-  );
-},
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => InventoryScreen()),
+                );
+              },
             ),
 
             Divider(),
@@ -80,7 +78,7 @@ class ReportSidePanel extends StatelessWidget {
               title: Text('Profit/Loss Report'),
               onTap: () {
                 // Handle reports click
-                Navigator.pushReplacementNamed(context, '/report');
+                Navigator.pushReplacementNamed(context, '/profitandloss');
               },
             ),
 

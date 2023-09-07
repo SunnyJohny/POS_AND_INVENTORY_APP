@@ -523,7 +523,7 @@ class ProductSoldChartWidget extends StatelessWidget {
             },
             child: Text('Show Aggregate Sales'),
           ),
-        ],
+        ], 
       ),
     );
   }

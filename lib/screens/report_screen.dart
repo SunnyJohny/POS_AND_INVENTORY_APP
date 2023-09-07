@@ -59,7 +59,7 @@ class _ProductTileState extends State<ProductTile> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
-              Text('\$${widget.product.price.toStringAsFixed(2)}'),
+              Text('\₦${widget.product.price.toStringAsFixed(2)}'),
               if (isHovered)
                 Tooltip(
                   message: 'Add to Cart',

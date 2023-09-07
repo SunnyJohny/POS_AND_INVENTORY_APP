@@ -9,17 +9,20 @@ List<Product> cartItems = []; // Initialize 'cartItems' as an empty list
   CustomSalesReport({this.total = 0.0}); // Assign a default value for 'total'
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Custom Sales Report'),
-      ),
-      body:  Center(
-          child: CustomSalesReportModal(
-        attendantName: 'John Doe', // Provide the attendant's name
-        cartItems: [],
-        total: total,
-      )),
-    );
-  }
+ Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Custom Sales Report'),
+    ),
+    body: Center(
+      child: CustomSalesReportModal(
+            attendantName: 'John Doe',
+            cartItems: [],
+            total: 200,
+            startDate: DateTime.now(),
+            endDate: DateTime.now(),
+          ),
+    ),
+  );
+}
 }

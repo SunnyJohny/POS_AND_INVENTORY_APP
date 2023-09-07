@@ -89,7 +89,7 @@ class SidePanel extends StatelessWidget {
             title: Text('Logout'),
             onTap: () {
               // Handle logout click
-              // After logout, navigate back to the login page
+              // After logout, navigate back to thpagee login 
               Navigator.pushReplacementNamed(context, '/login');
             },
           ),

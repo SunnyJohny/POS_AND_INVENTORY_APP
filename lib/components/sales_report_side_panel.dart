@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SalesReportSidePanel extends StatelessWidget {
   final Function(String) onItemSelected; // Callback for item selection
 
-  SalesReportSidePanel({required this.onItemSelected});
+ SalesReportSidePanel({required this.onItemSelected});
 
   @override
   Widget build(BuildContext context) {

@@ -50,7 +50,7 @@ class _BugReportWidgetState extends State<BugReportWidget> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Bug Report Submitted'),
+          title: const Text('Bug Report Submitted'), 
           content: Text('Thank you for reporting the bug!'),
           actions: [
             TextButton(

@@ -4,12 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_desktop_app/components/custom_sales_report_modal.dart';
 
-class SalesDashboard extends StatefulWidget {
+class ProfitAndLossDashboard extends StatefulWidget {
   @override
-  _SalesDashboardState createState() => _SalesDashboardState();
+  _ProfitAndLossDashboardState createState() => _ProfitAndLossDashboardState();
 }
 
-class _SalesDashboardState extends State<SalesDashboard> {
+class _ProfitAndLossDashboardState extends State<ProfitAndLossDashboard> {
   int currentPage = 1;
   int itemsPerPage = 5;
 
@@ -58,6 +58,8 @@ class _SalesDashboardState extends State<SalesDashboard> {
       'itemname': 'Phone',
       'customer': 'John Doe',
       'quantity': 5,
+      'cost': 50.5,
+
       'payment': 'Cash',
       'amount': 500.0,
       'attendant': 'Jane Smith',
@@ -71,7 +73,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
       'itemname': 'Cream',
       'customer': 'Alice Johnson',
       'quantity': 6,
-      'payment': 'Card',
+      'cost': 50,
       'amount': 250.0,
       'attendant': 'John Smith',
       'status': 'Completed',
@@ -84,46 +86,51 @@ class _SalesDashboardState extends State<SalesDashboard> {
       'itemname': 'Paracetamol',
       'customer': 'Bob Williams',
       'quantity': 4,
-      'payment': 'Cash',
+      'cost': 100,
+
+      // 'payment': 'Cash',
       'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
+      // 'attendant': 'Jane Doe',
+      // 'status': 'Pending',
     },
     {
       'sn': '4',
       'id': '4', // Item ID or Number
       'transactionId': 'TRX003',
       'date': '${DateTime.now().toString().split(' ')[0]}',
-      'itemname': 'Paracetamol',
+      'itemname': 'Charger',
       'customer': 'Bob Williams',
       'quantity': 4,
-      'payment': 'Cash',
+      'cost': 100,
+
       'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
+      // 'attendant': 'Jane Doe',
+      // 'status': 'Pending',
     },
     {
       'sn': '3',
       'id': '5', // Item ID or Number
       'transactionId': 'TRX003',
       'date': '${DateTime.now().toString().split(' ')[0]}',
-      'itemname': 'Paracetamol',
+      'itemname': 'Battery',
       'customer': 'Bob Williams',
       'quantity': 4,
-      'payment': 'Cash',
+      'cost': 80,
+
       'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
+      // 'attendant': 'Jane Doe',
+      // 'status': 'Pending',
     },
     {
       'sn': '3',
       'id': '6', // Item ID or Number
       'transactionId': 'TRX003',
       'date': '2023-07-01',
-      'itemname': 'Paracetamol',
+      'itemname': 'Wears',
       'customer': 'Bob Williams',
       'quantity': 4,
-      'payment': 'Cash',
+      'cost': 20,
+
       'amount': 700.0,
       'attendant': 'Jane Doe',
       'status': 'Pending',
@@ -133,10 +140,11 @@ class _SalesDashboardState extends State<SalesDashboard> {
       'id': '7', // Item ID or Number
       'transactionId': 'TRX003',
       'date': '2023-07-02',
-      'itemname': 'Paracetamol',
+      'itemname': 'Keys',
       'customer': 'Bob Williams',
       'quantity': 4,
-      'payment': 'Cash',
+      'cost': 90,
+
       'amount': 700.0,
       'attendant': 'Jane Doe',
       'status': 'Pending',
@@ -146,10 +154,11 @@ class _SalesDashboardState extends State<SalesDashboard> {
       'id': '8', // Item ID or Number
       'transactionId': 'TRX003',
       'date': '2023-07-03',
-      'itemname': 'Paracetamol',
+      'itemname': 'Laptop',
       'customer': 'Bob Williams',
       'quantity': 4,
-      'payment': 'Cash',
+      'cost': 60,
+
       'amount': 700.0,
       'attendant': 'Jane Doe',
       'status': 'Pending',
@@ -232,6 +241,24 @@ class _SalesDashboardState extends State<SalesDashboard> {
         totalSales += item['amount'];
       }
       return totalSales;
+    }
+  }
+
+  double getTotalCOGS() {
+    if (_searchText.isEmpty && fromDate == null && toDate == null) {
+      // If nothing is filtered, return the total COGS from the original items list
+      double totalCOGS = 0;
+      for (var item in items) {
+        totalCOGS += item['cost'] * item['quantity'];
+      }
+      return totalCOGS;
+    } else {
+      // If there are filters, calculate the total COGS from the filtered items list
+      double totalCOGS = 0;
+      for (var item in filteredItems) {
+        totalCOGS += item['cost'] * item['quantity'];
+      }
+      return totalCOGS;
     }
   }
 
@@ -337,7 +364,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
           Padding(
             padding: EdgeInsets.only(left: 16),
             child: Text(
-              'Sales Stats',
+              'P&L Stats',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
@@ -345,31 +372,31 @@ class _SalesDashboardState extends State<SalesDashboard> {
           Row(
             children: [
               _buildStatCard(
-                'Today Sales',
+                'Revenue',
                 '₦${getTodaySales().toStringAsFixed(2)}',
-                Icons.attach_money,
+                Icons.trending_up, // Updated icon
                 Colors.blue,
               ),
+              
               SizedBox(width: 16),
               _buildStatCard(
-                'Total Sales',
-                '₦${getTotalSales().toStringAsFixed(2)}',
-                Icons.monetization_on,
-                Colors.green,
-              ),
-              SizedBox(width: 16),
-              _buildStatCard(
-                'Today Invoices',
-                '',
+                'COGS',
+                getTotalCOGS(),
                 Icons.receipt,
                 Colors.orange,
               ),
               SizedBox(width: 16),
               _buildStatCard(
-                'Products Sold Today',
+                'Opex',
+                '₦${getTotalSales().toStringAsFixed(2)}',
+                Icons.money_off, // Updated icon
+                Colors.green,
+              ),
+              _buildStatCard(
+                'Profit',
                 getProductsSoldToday(),
-                Icons.shopping_cart,
-                Colors.red,
+                Icons.assignment, // Updated icon
+                Color.fromARGB(255, 133, 50, 249),
               ),
             ],
           ),
@@ -454,12 +481,12 @@ class _SalesDashboardState extends State<SalesDashboard> {
             columns: [
               DataColumn(label: Text('Transaction ID')),
               DataColumn(label: Text('Date')),
-              DataColumn(label: Text('Attendant')),
+
               DataColumn(label: Text('Item Name')),
               DataColumn(label: Text('Qty')),
-              DataColumn(label: Text('Amount')),
-              DataColumn(label: Text('Payment')),
-              DataColumn(label: Text('Status')),
+              DataColumn(label: Text(' Cost')),
+              // DataColumn(label: Text('Status')),
+              DataColumn(label: Text('Sales Price')),
             ],
             rows: filteredItems
                 .map(
@@ -467,12 +494,16 @@ class _SalesDashboardState extends State<SalesDashboard> {
                     cells: [
                       DataCell(Text(item['transactionId'])),
                       DataCell(Text(item['date'])),
-                      DataCell(Text(item['attendant'])),
+
                       DataCell(Text(item['itemname'])),
                       DataCell(Text(item['quantity'].toString())),
+                      // DataCell(Text('₦${item['cost'].toStringAsFixed(2)}')),
+                      DataCell(Text(
+                          '₦${(item['cost'] * item['quantity']).toStringAsFixed(2)}')),
+
                       DataCell(Text('₦${item['amount'].toStringAsFixed(2)}')),
-                      DataCell(Text(item['payment'])),
-                      DataCell(Text(item['status'])),
+
+                      // DataCell(Text(item['status'])),
                     ],
                   ),
                 )
@@ -500,6 +531,18 @@ class _SalesDashboardState extends State<SalesDashboard> {
               ),
               Text('Page $currentPage of $totalPages'),
               // Add the "Print Sales Report" button
+               ElevatedButton(
+                onPressed: () => _printSalesReport(
+                  shouldPrintReport: true, // or false based on your logic
+                  filteredItems:
+                      filteredItems, // provide the filtered items list
+                  totalSales: getTotalSales(), // provide the total sales
+                  fromDate: fromDate!, // Non-null assertion here
+                  toDate: toDate!, // Non-null assertion here
+                  context: context,
+                ),
+                child: const Text('Print P&L Statement'),
+              ),
               ElevatedButton(
                 onPressed: () => _printSalesReport(
                   shouldPrintReport: true, // or false based on your logic

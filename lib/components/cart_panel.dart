@@ -85,7 +85,7 @@ class CartPanel extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text('\$${itemTotal.toStringAsFixed(2)}'), // Display item total
+                Text('\₦${itemTotal.toStringAsFixed(2)}'), // Display item total
               ],
             );
           },
@@ -93,7 +93,7 @@ class CartPanel extends StatelessWidget {
       ),
       SizedBox(height: 10),
       Text(
-        'Total: \$${total.toStringAsFixed(2)}',
+        'Total: \₦${total.toStringAsFixed(2)}',
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
       SizedBox(height: 10),
@@ -192,7 +192,7 @@ class CartPanel extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Text('\$${itemTotal.toStringAsFixed(2)}'), // Display item total
+                    Text('\₦${itemTotal.toStringAsFixed(2)}'), // Display item total
                   ],
                 );
               },
@@ -200,7 +200,7 @@ class CartPanel extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            'Total: \$${total.toStringAsFixed(2)}',
+            'Total: \₦${total.toStringAsFixed(2)}',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 10),

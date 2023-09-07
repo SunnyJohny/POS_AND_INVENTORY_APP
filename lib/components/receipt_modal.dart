@@ -111,14 +111,14 @@ class ReceiptModal extends StatelessWidget {
                         Expanded(
                           flex: 2,
                           child: Text(
-                            '\#${product.price.toStringAsFixed(2)}',
+                            '\₦${product.price.toStringAsFixed(2)}',
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
                         Expanded(
                           flex: 2,
                           child: Text(
-                            '\#${product.totalPrice.toStringAsFixed(2)}',
+                            '\₦${product.totalPrice.toStringAsFixed(2)}',
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
@@ -132,15 +132,15 @@ class ReceiptModal extends StatelessWidget {
             Divider(),
             SizedBox(height: 10),
             Text(
-              'Sub-Total: \$${total.toStringAsFixed(2)}',
+              'Sub-Total: \₦${total.toStringAsFixed(2)}',
               style: TextStyle(fontSize: 16),
             ),
             Text(
-              'Tax: \$${(total * 0.15).toStringAsFixed(2)}',
+              'Tax: \₦${(total * 0.15).toStringAsFixed(2)}',
               style: TextStyle(fontSize: 16),
             ),
             Text(
-              'Total: \$${(total + (total * 0.15)).toStringAsFixed(2)}',
+              'Total: \₦${(total + (total * 0.15)).toStringAsFixed(2)}',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
@@ -275,13 +275,13 @@ class ReceiptModal extends StatelessWidget {
                           pw.Expanded(
                             flex: 2,
                             child: pw.Text(
-                                '\$${product.price.toStringAsFixed(2)}',
+                                '\₦${product.price.toStringAsFixed(2)}',
                                 style: pw.TextStyle(fontSize: 16)),
                           ),
                           pw.Expanded(
                             flex: 2,
                             child: pw.Text(
-                                '\$${product.totalPrice.toStringAsFixed(2)}',
+                                '\₦${product.totalPrice.toStringAsFixed(2)}',
                                 style: pw.TextStyle(fontSize: 16)),
                           ),
                         ],
@@ -292,12 +292,12 @@ class ReceiptModal extends StatelessWidget {
                 pw.SizedBox(height: 20),
                 pw.Divider(),
                 pw.SizedBox(height: 10),
-                pw.Text('Sub-Total: \$${total.toStringAsFixed(2)}',
+                pw.Text('Sub-Total: \₦${total.toStringAsFixed(2)}',
                     style: pw.TextStyle(fontSize: 16)),
-                pw.Text('Tax: \$${(total * 0.15).toStringAsFixed(2)}',
+                pw.Text('Tax: \₦${(total * 0.15).toStringAsFixed(2)}',
                     style: pw.TextStyle(fontSize: 16)),
                 pw.Text(
-                    'Total: \$${(total + (total * 0.15)).toStringAsFixed(2)}',
+                    'Total: \₦${(total + (total * 0.15)).toStringAsFixed(2)}',
                     style: pw.TextStyle(
                         fontSize: 18, fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 10),
