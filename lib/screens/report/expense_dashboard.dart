@@ -61,45 +61,46 @@ class _ExpenseDashboardState extends State<ExpenseDashboard> {
     }
   }
 
-  List<Map<String, dynamic>> items = [
-    {
-      // 'sn': '1',
-      // 'id': '1', // Item ID or Number
-      'transactionId': 'TRX001',
-      'date': '2023-07-15',
-      'description': 'Expense 1', // Add a description field
-      'expCat': 'Category 1', // Add an expense category field
-      'amount': 500.0,
-      'vendor': 'Vendor 1', // Add a vendor field
-      'pMethod': 'Cash', // Add a payment method field
-    },
-    {
-      // 'sn': '2',
-      // 'id': '2', // Item ID or Number
-      'transactionId': 'TRX002',
-      'date': '2023-07-15',
-      'description': 'Expense 2', // Add a description field
-      'expCat': 'Category 2', // Add an expense category field
-      'amount': 250.0,
-      'vendor': 'Vendor 2', // Add a vendor field
-      'pMethod': 'Credit Card', // Add a payment method field
-    },
+List<Map<String, dynamic>> items = [
+  {
+    'transactionId': 'TRX001',
+    'date': '2023-07-15',
+    'description': 'Expense 1',
+    'exp': 'Office Rent', // Updated to Office Rent
+    'amount': 500.0,
+    'vendor': 'Vendor 1',
+    'pMethod': 'Cash',
+  },
+  {
+    'transactionId': 'TRX002',
+    'date': '2023-07-15',
+    'description': 'Expense 2',
+    'exp': 'Workshops', // Updated to Workshops
+    'amount': 250.0,
+    'vendor': 'Vendor 2',
+    'pMethod': 'Credit Card',
+  },
+  {
+    'transactionId': 'TRX003',
+    'date': '2023-07-15',
+    'description': 'Expense 3',
+    'exp':'Workshops', // Updated to Workshops
+    'amount': 450.0,
+    'vendor': 'Vendor 2',
+    'pMethod': 'Credit Card',
+  },
+  {
+    'transactionId': 'TRX004',
+    'date': '2023-07-15',
+    'description': 'Expense 4',
+    'exp': 'Equipment Repairs', // Updated to Equipment Repairs
+    'amount': 750.0,
+    'vendor': 'Vendor 3', // Update vendor if needed
+    'pMethod': 'Cash',
+  },
+  // Add more items here...
+];
 
-      {
-      // 'sn': '2',
-      // 'id': '2', // Item ID or Number
-      'transactionId': 'TRX002',
-      'date': '2023-07-15',
-      'description': 'Expense 3', // Add a description field
-      'expCat': 'Category 2', // Add an expense category field
-      'amount': 450.0,
-      'vendor': 'Vendor 2', // Add a vendor field
-      'pMethod': 'Credit Card', // Add a payment method field
-    },
-
-
-    // Add more items here...
-  ];
   void sortItemsByDate() {
     items.sort((a, b) {
       // Convert the date strings to DateTime objects
@@ -422,7 +423,7 @@ class _ExpenseDashboardState extends State<ExpenseDashboard> {
               DataColumn(label: Text('Transaction ID')),
               DataColumn(label: Text('Date')),
               DataColumn(label: Text('Description')),
-              DataColumn(label: Text('Exp Cat')),
+              DataColumn(label: Text('Expense')),
               DataColumn(label: Text('Amount')),
               DataColumn(label: Text('Vendor')),
               DataColumn(label: Text('P.Method')),
@@ -436,7 +437,7 @@ class _ExpenseDashboardState extends State<ExpenseDashboard> {
                       DataCell(
                           Text(item['description'])), // Add description cell
                       DataCell(
-                          Text(item['expCat'])), // Add expense category cell
+                          Text(item['exp'])), // Add expense category cell
                      DataCell(Text(item['amount'].toStringAsFixed(2))),
 
                       DataCell(Text(item['vendor'])), // Add vendor cell

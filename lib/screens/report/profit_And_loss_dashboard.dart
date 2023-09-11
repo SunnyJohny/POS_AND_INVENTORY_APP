@@ -3,6 +3,14 @@ import 'package:intl/intl.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_desktop_app/components/custom_sales_report_modal.dart';
+import 'package:my_desktop_app/components/profitandlossmodal.dart';
+
+
+import 'package:pdf/pdf.dart';
+import 'dart:io';
+
+import 'package:pdf/widgets.dart' as pw; // Make sure you import 'pw' as 'pw'
+
 
 class ProfitAndLossDashboard extends StatefulWidget {
   @override
@@ -48,6 +56,91 @@ class _ProfitAndLossDashboardState extends State<ProfitAndLossDashboard> {
       });
     }
   }
+
+  Future<void> generateIncomeStatement(
+  double revenue,
+  double cogs,
+  double opex,
+  double profit,
+) async {
+  final pdf = pw.Document();
+
+  // Add a page to the PDF
+  pdf.addPage(
+    pw.Page(
+      build: (context) {
+        return pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            // Add the title at the top
+            pw.Center(child: pw.Text('Income Statement', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold))),
+            pw.SizedBox(height: 20),
+            // Add revenue, COGS, opex, and profit
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text('Revenue:'),
+                pw.Text('N${revenue.toStringAsFixed(2)}'),
+              ],
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text('Cost of Goods Sold (COGS):'),
+                pw.Text('N${cogs.toStringAsFixed(2)}'),
+              ],
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text('Operating Expenses (Opex):'),
+                pw.Text('N${opex.toStringAsFixed(2)}'),
+              ],
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text('Profit:'),
+                pw.Text('N${profit.toStringAsFixed(2)}', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+              ],
+            ),
+          ],
+        );
+      },
+    ),
+  );
+
+  // Save the PDF to a file
+  final pdfFile = File('income_statement.pdf');
+  await pdfFile.writeAsBytes(await pdf.save());
+
+  // You can now share, print, or display the PDF as needed
+  // For example, you can use a package like 'printing' to print the PDF
+  // or use a package like 'open_file' to open and view the PDF
+}
+
+void _printIncomeStatement({
+  required double revenue,
+  required double cogs,
+  required double opex,
+  required double profit,
+  required BuildContext context,
+}) async {
+  // Print the income statement PDF
+  await generateIncomeStatement(revenue, cogs, opex, profit);
+
+  // Display a success message to the user
+  // Fluttertoast.showToast(
+  //   msg: 'Income statement printed successfully!',
+  //   toastLength: Toast.LENGTH_SHORT,
+  //   gravity: ToastGravity.CENTER,
+  //   timeInSecForIosWeb: 1,
+  //   backgroundColor: Colors.grey[800],
+  //   textColor: Colors.white,
+  //   fontSize: 16.0,
+  // );
+}
+
 
   List<Map<String, dynamic>> items = [
     {
@@ -373,7 +466,7 @@ class _ProfitAndLossDashboardState extends State<ProfitAndLossDashboard> {
             children: [
               _buildStatCard(
                 'Revenue',
-                '₦${getTodaySales().toStringAsFixed(2)}',
+                '₦${getTotalSales().toStringAsFixed(2)}',
                 Icons.trending_up, // Updated icon
                 Colors.blue,
               ),
@@ -531,18 +624,32 @@ class _ProfitAndLossDashboardState extends State<ProfitAndLossDashboard> {
               ),
               Text('Page $currentPage of $totalPages'),
               // Add the "Print Sales Report" button
-               ElevatedButton(
-                onPressed: () => _printSalesReport(
-                  shouldPrintReport: true, // or false based on your logic
-                  filteredItems:
-                      filteredItems, // provide the filtered items list
-                  totalSales: getTotalSales(), // provide the total sales
-                  fromDate: fromDate!, // Non-null assertion here
-                  toDate: toDate!, // Non-null assertion here
-                  context: context,
-                ),
-                child: const Text('Print P&L Statement'),
-              ),
+         ElevatedButton(
+  onPressed: () {
+    final revenue = getTotalSales(); // Replace with your logic to calculate revenue
+    final cogs = getTotalCOGS(); // Replace with your logic to calculate COGS
+
+    // Placeholder values for opex and profit
+    final opex = 500.0;
+    final profit = 1000.0;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ProfitAndLossStatementModal(
+          revenue: revenue,
+          cogs: cogs,
+          operatingExpenses:[700,800], // Convert opex to a list if there are multiple expenses
+          profit: 600.7,
+        );
+      },
+    );
+  },
+  child: const Text('Print Income Statement'),
+),
+
+ 
+
               ElevatedButton(
                 onPressed: () => _printSalesReport(
                   shouldPrintReport: true, // or false based on your logic
