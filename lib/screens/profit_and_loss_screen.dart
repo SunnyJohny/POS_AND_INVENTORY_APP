@@ -7,7 +7,6 @@ import 'package:my_desktop_app/components/custom_sales_report.dart';
 import 'package:my_desktop_app/screens/report/profit_And_loss_dashboard.dart';
 import 'package:my_desktop_app/screens/report/expense_dashboard.dart';
 
-
 import 'package:my_desktop_app/screens/report/analytsis_dashboard.dart';
 
 import 'package:my_desktop_app/screens/report/bug_report.dart';
@@ -16,6 +15,8 @@ import 'package:my_desktop_app/screens/report/add_product_screen.dart';
 
 import 'package:provider/provider.dart';
 import 'package:my_desktop_app/components/providers/product_cart_provider.dart';
+import 'package:my_desktop_app/components/dashboard_widget.dart';
+import 'package:my_desktop_app/data_lists.dart';
 
 class ProfitAndLossReportScreen extends StatefulWidget {
   @override
@@ -24,6 +25,24 @@ class ProfitAndLossReportScreen extends StatefulWidget {
 }
 
 class _ProfitAndLossReportScreenState extends State<ProfitAndLossReportScreen> {
+  late DashboardWidget dashboardWidget; // Declare dashboardWidget
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize dashboardWidget here
+    dashboardWidget = DashboardWidget(
+      title: 'Your Title',
+      items: expenseData,
+      printReportCallback: _printIncomeStatement,
+    );
+  }
+
+  void _printIncomeStatement() {
+    print(expenseData);
+  }
+
   String selectedItem = 'Dashboard'; // Hardcoded selected item
 
   Widget renderSelectedWidget() {
@@ -35,8 +54,11 @@ class _ProfitAndLossReportScreenState extends State<ProfitAndLossReportScreen> {
       case 'Analysis':
         return AnalysisDashboard();
       case 'Expenses':
-        return ExpenseDashboard();
-        
+         return SingleChildScrollView(
+          // Wrap SalesDashboard with SingleChildScrollView
+          child:dashboardWidget,
+        );
+
       case 'Custom Report':
         return CustomSalesReport();
       // return AddProductScreen();
@@ -44,7 +66,7 @@ class _ProfitAndLossReportScreenState extends State<ProfitAndLossReportScreen> {
       case 'Dashboard':
         return SingleChildScrollView(
           // Wrap SalesDashboard with SingleChildScrollView
-          child: ProfitAndLossDashboard(),
+          child: dashboardWidget,// In Ihe Maintime
         );
       default:
         return SizedBox.shrink();

@@ -3,13 +3,31 @@ import 'package:intl/intl.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_desktop_app/components/custom_sales_report_modal.dart';
+import 'package:my_desktop_app/components/profitandlossmodal.dart';
 
-class SalesDashboard extends StatefulWidget {
+import 'package:pdf/pdf.dart';
+import 'dart:io';
+
+import 'package:pdf/widgets.dart' as pw;
+
+// Define a class for your dashboard widget
+class DashboardWidget extends StatefulWidget {
+  final String title;
+  final List<Map<String, dynamic>> items; // This will hold your data
+  final void Function() printReportCallback; // Callback for printing reports
+
+  // Constructor to initialize the widget
+  DashboardWidget({
+    required this.title,
+    required this.items,
+    required this.printReportCallback,
+  });
+
   @override
-  _SalesDashboardState createState() => _SalesDashboardState();
+  _DashboardWidgetState createState() => _DashboardWidgetState();
 }
 
-class _SalesDashboardState extends State<SalesDashboard> {
+class _DashboardWidgetState extends State<DashboardWidget> {
   int currentPage = 1;
   int itemsPerPage = 5;
 
@@ -25,8 +43,6 @@ class _SalesDashboardState extends State<SalesDashboard> {
     );
 
     if (selectedDate != null) {
-      itemsPerPage = 1; // Reassign itemsPerPage to 1
-
       setState(() {
         fromDate = selectedDate;
       });
@@ -44,121 +60,96 @@ class _SalesDashboardState extends State<SalesDashboard> {
     if (selectedDate != null) {
       setState(() {
         toDate = selectedDate;
-        itemsPerPage = 1; // Reassign itemsPerPage to 4
       });
     }
   }
 
-  List<Map<String, dynamic>> items = [
-    {
-      'sn': '1',
-      'id': '1', // Item ID or Number
-      'transactionId': 'TRX001',
-      'date': '2023-07-15',
-      'itemname': 'Phone',
-      'customer': 'John Doe',
-      'quantity': 5,
-      'payment': 'Cash',
-      'amount': 500.0,
-      'attendant': 'Jane Smith',
-      'status': 'Completed',
-    },
-    {
-      'sn': '2',
-      'id': '2', // Item ID or Number
-      'transactionId': 'TRX002',
-      'date': '${DateTime.now().toString().split(' ')[0]}',
-      'itemname': 'Cream',
-      'customer': 'Alice Johnson',
-      'quantity': 6,
-      'payment': 'Card',
-      'amount': 250.0,
-      'attendant': 'John Smith',
-      'status': 'Completed',
-    },
-    {
-      'sn': '3',
-      'id': '3', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '${DateTime.now().toString().split(' ')[0]}',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
-    },
-    {
-      'sn': '4',
-      'id': '4', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '${DateTime.now().toString().split(' ')[0]}',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
-    },
-    {
-      'sn': '3',
-      'id': '5', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '${DateTime.now().toString().split(' ')[0]}',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
-    },
-    {
-      'sn': '3',
-      'id': '6', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '2023-07-01',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
-    },
-    {
-      'sn': '3',
-      'id': '7', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '2023-07-02',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
-    },
-    {
-      'sn': '3',
-      'id': '8', // Item ID or Number
-      'transactionId': 'TRX003',
-      'date': '2023-07-03',
-      'itemname': 'Paracetamol',
-      'customer': 'Bob Williams',
-      'quantity': 4,
-      'payment': 'Cash',
-      'amount': 700.0,
-      'attendant': 'Jane Doe',
-      'status': 'Pending',
-    },
+//   Future<void> generateIncomeStatement(
+//   double revenue,
+//   double cogs,
+//   double opex,
+//   double profit,
+// ) async {
+//   final pdf = pw.Document();
 
-    // Add more items here...
-  ];
+//   // Add a page to the PDF
+//   pdf.addPage(
+//     pw.Page(
+//       build: (context) {
+//         return pw.Column(
+//           crossAxisAlignment: pw.CrossAxisAlignment.start,
+//           children: [
+//             // Add the title at the top
+//             pw.Center(child: pw.Text('Income Statement', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold))),
+//             pw.SizedBox(height: 20),
+//             // Add revenue, COGS, opex, and profit
+//             pw.Row(
+//               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+//               children: [
+//                 pw.Text('Revenue:'),
+//                 pw.Text('N${revenue.toStringAsFixed(2)}'),
+//               ],
+//             ),
+//             pw.Row(
+//               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+//               children: [
+//                 pw.Text('Cost of Goods Sold (COGS):'),
+//                 pw.Text('N${cogs.toStringAsFixed(2)}'),
+//               ],
+//             ),
+//             pw.Row(
+//               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+//               children: [
+//                 pw.Text('Operating Expenses (Opex):'),
+//                 pw.Text('N${opex.toStringAsFixed(2)}'),
+//               ],
+//             ),
+//             pw.Row(
+//               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+//               children: [
+//                 pw.Text('Profit:'),
+//                 pw.Text('N${profit.toStringAsFixed(2)}', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+//               ],
+//             ),
+//           ],
+//         );
+//       },
+//     ),
+//   );
+
+  // Save the PDF to a file
+  // final pdfFile = File('income_statement.pdf');
+  // await pdfFile.writeAsBytes(await pdf.save());
+
+  // You can now share, print, or display the PDF as needed
+  // For example, you can use a package like 'printing' to print the PDF
+  // or use a package like 'open_file' to open and view the PDF
+// }
+
+// void _printIncomeStatement({
+//   required double revenue,
+//   required double cogs,
+//   required double opex,
+//   required double profit,
+//   required BuildContext context,
+// }) async {
+  // Print the income statement PDF
+  // await generateIncomeStatement(revenue, cogs, opex, profit);
+
+  // Display a success message to the user
+  // Fluttertoast.showToast(
+  //   msg: 'Income statement printed successfully!',
+  //   toastLength: Toast.LENGTH_SHORT,
+  //   gravity: ToastGravity.CENTER,
+  //   timeInSecForIosWeb: 1,
+  //   backgroundColor: Colors.grey[800],
+  //   textColor: Colors.white,
+  //   fontSize: 16.0,
+  // );
+// }
+
   void sortItemsByDate() {
-    items.sort((a, b) {
+    widget.items.sort((a, b) {
       // Convert the date strings to DateTime objects
       DateTime dateA = DateTime.parse(a['date']);
       DateTime dateB = DateTime.parse(b['date']);
@@ -168,23 +159,43 @@ class _SalesDashboardState extends State<SalesDashboard> {
     });
   }
 
+  // List<Map<String, dynamic>> get paginatedItems {
+  //   sortItemsByDate(); // Sort the items before pagination
+  //   final startIndex = (currentPage - 1) * itemsPerPage;
+  //   return widget.items.skip(startIndex).take(itemsPerPage).toList();
+  // }
   List<Map<String, dynamic>> get paginatedItems {
     sortItemsByDate(); // Sort the items before pagination
+    List<Map<String, dynamic>> filtered = [];
+
+    if (fromDate != null && toDate != null) {
+      // If both fromDate and toDate are selected, filter by date range
+      filtered = widget.items.where((item) {
+        final itemDate = DateTime.parse(item['date']);
+        return itemDate.isAfter(fromDate!) &&
+            itemDate.isBefore(toDate!.add(Duration(days: 1)));
+      }).toList();
+    } else {
+      // If no date range is selected, show all items
+      filtered = widget.items;
+    }
+
     final startIndex = (currentPage - 1) * itemsPerPage;
-    return items.skip(startIndex).take(itemsPerPage).toList();
+    return filtered.skip(startIndex).take(itemsPerPage).toList();
   }
 
-  int get totalItems => items.length;
+  int get totalItems => widget.items.length;
   int get totalPages => (totalItems / itemsPerPage).ceil();
-  
+
   List<Map<String, dynamic>> get filteredItems {
     if (_searchText.isEmpty && fromDate == null && toDate == null) {
       return paginatedItems;
     } else {
-      return items.where((item) {
+      return widget.items.where((item) {
         // Filter based on item name search
-        final bool itemNameMatches =
-            item['itemname'].toLowerCase().contains(_searchText.toLowerCase());
+        final bool itemNameMatches = item['description']
+            .toLowerCase()
+            .contains(_searchText.toLowerCase());
 
         // Filter based on date range selection
         final bool isDateInRange = (fromDate == null ||
@@ -210,7 +221,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
     var formattedDate = DateFormat('yyyy-MM-dd').format(now);
 
     double totalSales = 0;
-    for (var item in items) {
+    for (var item in widget.items) {
       if (item['date'] == formattedDate) {
         totalSales += item['amount'];
       }
@@ -222,7 +233,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
     if (_searchText.isEmpty && fromDate == null && toDate == null) {
       // If nothing is filtered, return the total sales from the original items list
       double totalSales = 0;
-      for (var item in items) {
+      for (var item in widget.items) {
         totalSales += item['amount'];
       }
       return totalSales;
@@ -233,6 +244,24 @@ class _SalesDashboardState extends State<SalesDashboard> {
         totalSales += item['amount'];
       }
       return totalSales;
+    }
+  }
+
+  double getTotalCOGS() {
+    if (_searchText.isEmpty && fromDate == null && toDate == null) {
+      // If nothing is filtered, return the total COGS from the original items list
+      double totalCOGS = 0;
+      for (var item in widget.items) {
+        totalCOGS += item['cost'] * item['quantity'];
+      }
+      return totalCOGS;
+    } else {
+      // If there are filters, calculate the total COGS from the filtered items list
+      double totalCOGS = 0;
+      for (var item in filteredItems) {
+        totalCOGS += item['cost'] * item['quantity'];
+      }
+      return totalCOGS;
     }
   }
 
@@ -319,7 +348,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
     var formattedDate = DateFormat('yyyy-MM-dd').format(now);
 
     int productsSold = 0;
-    for (var item in items) {
+    for (var item in widget.items) {
       if (item['date'] == formattedDate) {
         productsSold += item['quantity'] as int;
       }
@@ -338,7 +367,7 @@ class _SalesDashboardState extends State<SalesDashboard> {
           Padding(
             padding: EdgeInsets.only(left: 16),
             child: Text(
-              'Sales Stats',
+              widget.title,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
@@ -346,31 +375,38 @@ class _SalesDashboardState extends State<SalesDashboard> {
           Row(
             children: [
               _buildStatCard(
-                'Today Sales',
-                '₦${getTodaySales().toStringAsFixed(2)}',
-                Icons.attach_money,
+                'Revenue',
+                // '₦${getTotalSales().toStringAsFixed(2)}',
+                '₦200',
+
+                Icons.trending_up, // Updated icon
                 Colors.blue,
               ),
               SizedBox(width: 16),
               _buildStatCard(
-                'Total Sales',
-                '₦${getTotalSales().toStringAsFixed(2)}',
-                Icons.monetization_on,
-                Colors.green,
-              ),
-              SizedBox(width: 16),
-              _buildStatCard(
-                'Today Invoices',
-                '',
+                'COGS',
+                // getTotalCOGS(),
+                '₦400',
+
                 Icons.receipt,
                 Colors.orange,
               ),
               SizedBox(width: 16),
               _buildStatCard(
-                'Products Sold Today',
-                getProductsSoldToday(),
-                Icons.shopping_cart,
-                Colors.red,
+                'Opex',
+                // '₦${getTotalSales().toStringAsFixed(2)}',
+                '₦500',
+
+                Icons.money_off, // Updated icon
+                Colors.green,
+              ),
+              _buildStatCard(
+                'Profit',
+                // getProductsSoldToday(),
+                '₦900',
+
+                Icons.assignment, // Updated icon
+                Color.fromARGB(255, 133, 50, 249),
               ),
             ],
           ),
@@ -455,12 +491,11 @@ class _SalesDashboardState extends State<SalesDashboard> {
             columns: [
               DataColumn(label: Text('Transaction ID')),
               DataColumn(label: Text('Date')),
-              DataColumn(label: Text('Attendant')),
               DataColumn(label: Text('Item Name')),
               DataColumn(label: Text('Qty')),
-              DataColumn(label: Text('Amount')),
-              DataColumn(label: Text('Payment')),
-              DataColumn(label: Text('Status')),
+              DataColumn(label: Text(' Cost')),
+              // DataColumn(label: Text('Status')),
+              DataColumn(label: Text('Sales Price')),
             ],
             rows: filteredItems
                 .map(
@@ -468,12 +503,11 @@ class _SalesDashboardState extends State<SalesDashboard> {
                     cells: [
                       DataCell(Text(item['transactionId'])),
                       DataCell(Text(item['date'])),
-                      DataCell(Text(item['attendant'])),
-                      DataCell(Text(item['itemname'])),
-                      DataCell(Text(item['quantity'].toString())),
-                      DataCell(Text('₦${item['amount'].toStringAsFixed(2)}')),
-                      DataCell(Text(item['payment'])),
-                      DataCell(Text(item['status'])),
+                      DataCell(Text(item['description'])),
+                      DataCell(Text(item['exp'])),
+                      DataCell(Text(item['amount'].toStringAsFixed(2))),
+                      // DataCell(Text(item['vendor'])),
+                      DataCell(Text(item['pMethod'])),
                     ],
                   ),
                 )
@@ -501,6 +535,55 @@ class _SalesDashboardState extends State<SalesDashboard> {
               ),
               Text('Page $currentPage of $totalPages'),
               // Add the "Print Sales Report" button
+              ElevatedButton(
+                onPressed: () {
+                  // final revenue = 700; // Replace with your logic to calculate revenue
+                  // final cogs = 800 // Replace with your logic to calculate COGS
+
+                  // Placeholder values for opex and profit
+                  final opex = 500.0;
+                  final profit = 1000.0;
+
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      if (fromDate != null && toDate != null) {
+                        // Both fromDate and toDate are not null, so use them
+                        final filteredData = filteredItems.where((item) {
+                          final itemDate = DateTime.parse(item['date']);
+                          return itemDate.isAfter(fromDate!) &&
+                              itemDate.isBefore(toDate!.add(Duration(days: 1)));
+                        }).toList();
+
+                        return ProfitAndLossStatementModal(
+                          revenue: 900,
+                          cogs: 300,
+                          items: filteredData,
+                          profit: profit,
+                          fromDate: fromDate!,
+                          toDate: toDate!,
+                        );
+                      } else {
+                        // Either fromDate or toDate is null, show an error dialog or allow the user to select dates
+                        return AlertDialog(
+                          title: Text("Date Error"),
+                          content: Text("Please select valid date range."),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context); // Close the dialog
+                              },
+                              child: Text("OK"),
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  );
+                },
+                child: const Text('Print Income Statement'),
+              ),
+
               ElevatedButton(
                 onPressed: () => _printSalesReport(
                   shouldPrintReport: true, // or false based on your logic

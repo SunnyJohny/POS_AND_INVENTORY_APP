@@ -7,9 +7,7 @@ import 'package:my_desktop_app/screens/pos_screen.dart';
 import 'package:my_desktop_app/screens/login_screen.dart';
 import 'package:my_desktop_app/screens/report_screen.dart';
 import 'package:my_desktop_app/screens/profit_and_loss_screen.dart';
-
-
-
+import 'package:my_desktop_app/data_lists.dart';
 void main() {
   runApp(
     MultiProvider(
@@ -24,10 +22,10 @@ void main() {
   );
 }
 
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+   
     return MaterialApp(
       title: 'My Desktop App',
       theme: ThemeData(
@@ -38,9 +36,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginPage(),
         '/pos': (context) => PosScreen(),
         '/login': (context) => LoginPage(),
-       '/report': (context) => ReportScreen(),
-       '/profitandloss': (context) => ProfitAndLossReportScreen(),
-
+        '/report': (context) => ReportScreen(),
+        '/profitandloss': (context) => ProfitAndLossReportScreen(),
       },
     );
   }
